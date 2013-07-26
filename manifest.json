@@ -26,6 +26,12 @@
 	      "assets/js/views/**",
 	      "assets/js/router/**"
       ]
+    },
+    
+    "lib.js": {
+      "files": [
+        "assets/js/triagensLib/liveEditTable.js"
+      ]
     }
   },
   
