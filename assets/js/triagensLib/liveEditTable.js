@@ -35,7 +35,9 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
   
     rowToJSON = function(tr) {
       var res = {}, i = 0;
-      res._key = tr.id;
+      if (tr.id) {
+        res._key = tr.id;
+      }
       for (i = 0; i < count; i++) {
         res[titles[i]] = tr.children[i].firstChild.value;
       }
@@ -50,7 +52,7 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
       tr.appendChild(td);
       td.appendChild(input);
       input.onchange = function() {
-        changeCallback(rowToJSON(tr));
+        changeCallback(rowToJSON(tr), tr);
         checkEmptyRows();
       }
     },
@@ -58,7 +60,9 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
     insertEmptyRow = function (id) {
       var i = 0,
         tr = document.createElement("tr");
-      tr.id = id;
+      if (id) {
+        tr.id = id;
+      }
       for (i = 0; i < count; i++) {
         insertCell(tr);
       }
@@ -94,7 +98,7 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
     titleRow.appendChild(th);
   });
   table.appendChild(titleRow);
-  insertEmptyRow("fuxx");
+  insertEmptyRow();
   
   this.insertEmptyRow = insertEmptyRow;
   this.insertEntry = insertEntry;

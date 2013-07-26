@@ -68,8 +68,12 @@
     });
   
     app.post("speaker", function(req,res) {
-      speakers.save(req.requestBody);
-      res.json("OK");
+      res.json(speakers.save(req.requestBody));
+    });
+    
+    app.put("speaker/:id", function(req, res) {
+      var id = req.params("id");
+      speakers.update(id, req.requestBody);
     });
 
     app.del("speaker/:id", function(req, res) {
