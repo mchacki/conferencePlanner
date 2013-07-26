@@ -12,6 +12,12 @@
   "teardown": "scripts/teardown.js",
   
   "assets": {
+
+    "style.css": {
+      "files": [
+        "assets/css/**"
+      ]
+    },
     
     "index.html": {
       "files": [
