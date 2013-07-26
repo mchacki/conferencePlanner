@@ -11,5 +11,27 @@
   "setup": "scripts/setup.js",
   "teardown": "scripts/teardown.js",
   
+  "assets": {
+    
+    "index.html": {
+      "files": [
+        "assets/index.html"
+      ]
+    },
+    
+    "apps.js": {
+      "files": [
+	      "assets/js/models/**",
+	      "assets/js/collections/**",
+	      "assets/js/views/**",
+	      "assets/js/router/**"
+      ]
+    }
+  },
+  
+  "files": {
+    "templates": "assets/templates"
+  },
+  
   "lib": "."
 }
