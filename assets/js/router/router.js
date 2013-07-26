@@ -1,6 +1,7 @@
 /*jslint indent: 2, nomen: true, maxlen: 100, sloppy: true, vars: true, white: true, plusplus: true*/
 /*global window, $, Backbone */
 
+var app = app || {};
 app.Router = Backbone.Router.extend({
 
   routes: {
@@ -11,6 +12,7 @@ app.Router = Backbone.Router.extend({
 
   initialize: function () {
     this.naviView = new app.navigationView();
+    this.naviView.render();
   },
 
   main: function () {
