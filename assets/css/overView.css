@@ -1,3 +1,7 @@
+#content {
+  height: 100%;
+}
+
 #leftOverview, #midOverview, #rightOverview {
   float:left;
   height: 100%;
@@ -19,6 +23,8 @@
   margin:0 !important;
   padding: 0 !important;
   width: 100%;
+  background-color: #EEEEEE;
+  height: 100%;
 }
 
 .sortable {

@@ -4,7 +4,7 @@
 var app = app || {};
 
 app.overView = Backbone.View.extend({
-  el: '.content',
+  el: '#content',
 
   initialize: function () {
   },
@@ -30,19 +30,22 @@ app.overView = Backbone.View.extend({
     });
   },
 
-  addTrack: function (content) {
+  addTrack: function (track) {
     var ul = document.createElement('ul');
     $(ul).addClass('droptrue sortable');
     $(ul).css('id','sortable' + (this.count));
     $('#midOverview').append(ul);
 
-    var li = document.createElement('li');
-    $(li).addClass('ui-state-default');
-    $(li).text("TEXT");
-    $(ul).append(li);
     //content missing
 
     this.setTrackSize();
+  },
+
+  addLiElement: function (content) {
+    var li = document.createElement('li');
+    $(li).addClass('ui-state-default');
+    $(li).text("TEXT");
+    $('#availableTalks').append(li);
   },
 
   removeTrack: function () {
