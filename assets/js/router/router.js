@@ -12,6 +12,7 @@ app.Router = Backbone.Router.extend({
 
   initialize: function () {
     this.naviView = new app.navigationView();
+    this.naviView.render();
   },
 
   main: function () {
