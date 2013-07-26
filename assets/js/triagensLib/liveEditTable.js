@@ -1,23 +1,80 @@
 var app = app || {};
 
-app.LiveEditTable = function (titles) {
+app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
 
   var
     table = document.createElement("table"),
-    rows = {},
     count = titles.length,
+    rows = [],
     titleRow = document.createElement("tr"),
   
   /********************
   * Private Functions *
   ********************/
   
-    insertEmptyRow = function () {
-    
+    isEmptyRow = function(r) {
+      return !_.any(r.children, function(td) {
+        return td.firstChild.value !== "";
+      });
+    },
+  
+    checkEmptyRows = function() {
+      var i = 0, r;
+      for (i = 0; i < rows.length - 1; i++) {
+        r = rows[i];
+        if (isEmptyRow(r)) {
+          table.removeChild(r);
+          rows.splice(i, 1);
+          i--;
+        }
+      }
+      if (!isEmptyRow(rows[rows.length - 1])) {
+        addNewRowCallback();
+      }
+    },
+  
+    rowToJSON = function(tr) {
+      var res = {}, i = 0;
+      res._key = tr.id;
+      for (i = 0; i < count; i++) {
+        res[titles[i]] = tr.children[i].firstChild.value;
+      }
+      return res;
+    },
+  
+    insertCell = function(tr) {
+      var td, input;
+      td = document.createElement("td");
+      input = document.createElement("input");
+      input.type = "text";
+      tr.appendChild(td);
+      td.appendChild(input);
+      input.onchange = function() {
+        changeCallback(rowToJSON(tr));
+        checkEmptyRows();
+      }
+    },
+
+    insertEmptyRow = function (id) {
+      var i = 0,
+        tr = document.createElement("tr");
+      tr.id = id;
+      for (i = 0; i < count; i++) {
+        insertCell(tr);
+      }
+      table.appendChild(tr);
+      rows.push(tr);
+      return tr;
     },
   
     insertEntry = function(o) {
-      // TODO
+      var tr = rows[rows.length - 1],
+        i = 0;
+      tr.id = o._key;
+      for (i = 0; i < count; i++) {
+        tr.children[i].firstChild.value = o[titles[i]] || "";
+      }
+      addNewRowCallback();
     },
     
     getTableHTML = function() {
@@ -36,6 +93,8 @@ app.LiveEditTable = function (titles) {
     th.appendChild(document.createTextNode(t));
     titleRow.appendChild(th);
   });
+  table.appendChild(titleRow);
+  insertEmptyRow("fuxx");
   
   this.insertEmptyRow = insertEmptyRow;
   this.insertEntry = insertEntry;
