@@ -17,7 +17,8 @@ app.Router = Backbone.Router.extend({
   },
 
   main: function () {
-
+    this.overView = new app.overView();
+    this.overView.render();
   },
 
   talks: function () {
