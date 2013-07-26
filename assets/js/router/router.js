@@ -13,6 +13,7 @@ app.Router = Backbone.Router.extend({
   initialize: function () {
     this.naviView = new app.navigationView();
     this.naviView.render();
+    this.speakerView = new app.SpeakerView();
   },
 
   main: function () {
@@ -25,7 +26,7 @@ app.Router = Backbone.Router.extend({
   },
 
   speaker: function () {
-
+    this.speakerView.render();
   }
 
 });
