@@ -1,0 +1,15 @@
+{
+  "name": "Conference Planner",
+  "version": "0.0.1",
+  "description": "An application to plan conferences.",
+  "author": "Heiko Kernbach & Michael Hackstein",
+
+  "apps": {
+    "/": "conferencePlanner.js"
+  },
+
+  "setup": "scripts/setup.js",
+  "teardown": "scripts/teardown.js",
+  
+  "lib": "."
+}
