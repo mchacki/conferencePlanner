@@ -28,10 +28,10 @@
     "apps.js": {
       "files": [
         "assets/js/libs/jquery-1.9.1.js",
-        "assets/js/lib/underscore-min.js",
-        "assets/js/lib/backbone-min.js",
-        "assets/js/lib/ejs_0.9_alpha_1_production.js",
-        "assets/js/lib/bootstrap.js",
+        "assets/js/libs/underscore-min.js",
+        "assets/js/libs/backbone-min.js",
+        "assets/js/libs/ejs_0.9_alpha_1_production.js",
+        "assets/js/libs/bootstrap.js",
 	      "assets/js/models/**",
 	      "assets/js/collections/**",
 	      "assets/js/views/**",
