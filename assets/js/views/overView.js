@@ -4,7 +4,7 @@
 var app = app || {};
 
 app.overView = Backbone.View.extend({
-  el: '.content',
+  el: '#content',
 
   initialize: function () {
   },
@@ -22,27 +22,42 @@ app.overView = Backbone.View.extend({
   },
 
   applyCSS: function () {
+    var winHeight = $(window).height() - 40;
+    $('#leftOverview').height(winHeight);
+    $('#midOverview').height(winHeight);
+    $('#rightOverview').height(winHeight);
   },
 
   applyEvents: function () {
     $( "ul.droptrue" ).sortable({
-      connectWith: "ul"
+      connectWith: "ul",
+      //mouse position
+      start: function (e, ui) {
+        $(ui.item).css('width', '100px');
+      },
+      stop: function (e, ui) {
+        $(ui.item).css('width', '100%');
+      }
     });
   },
 
-  addTrack: function (content) {
+  addTrack: function (track) {
     var ul = document.createElement('ul');
     $(ul).addClass('droptrue sortable');
     $(ul).css('id','sortable' + (this.count));
     $('#midOverview').append(ul);
-
-    var li = document.createElement('li');
-    $(li).addClass('ui-state-default');
-    $(li).text("TEXT");
-    $(ul).append(li);
     //content missing
 
     this.setTrackSize();
+  },
+
+  addLiElement: function (content) {
+    var li = document.createElement('li');
+    $(li).addClass('ui-state-default');
+    $(li).text("TEXT");
+    //content missing
+
+    $('#availableTalks').append(li);
   },
 
   removeTrack: function () {
