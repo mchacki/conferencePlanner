@@ -22,11 +22,22 @@ app.overView = Backbone.View.extend({
   },
 
   applyCSS: function () {
+    var winHeight = $(window).height() - 40;
+    $('#leftOverview').height(winHeight);
+    $('#midOverview').height(winHeight);
+    $('#rightOverview').height(winHeight);
   },
 
   applyEvents: function () {
     $( "ul.droptrue" ).sortable({
-      connectWith: "ul"
+      connectWith: "ul",
+      //mouse position
+      start: function (e, ui) {
+        $(ui.item).css('width', '100px');
+      },
+      stop: function (e, ui) {
+        $(ui.item).css('width', '100%');
+      }
     });
   },
 
@@ -35,7 +46,6 @@ app.overView = Backbone.View.extend({
     $(ul).addClass('droptrue sortable');
     $(ul).css('id','sortable' + (this.count));
     $('#midOverview').append(ul);
-
     //content missing
 
     this.setTrackSize();
@@ -45,6 +55,8 @@ app.overView = Backbone.View.extend({
     var li = document.createElement('li');
     $(li).addClass('ui-state-default');
     $(li).text("TEXT");
+    //content missing
+
     $('#availableTalks').append(li);
   },
 
