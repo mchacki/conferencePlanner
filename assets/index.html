@@ -1,1 +1,13 @@
-<html>Hallo Welt</html>
+<html>Hallo Welt
+
+  <body>
+    <div id="mytest">
+    </div>
+    <script src="lib.js"></script>
+    <script>
+      var tbl = new app.LiveEditTable(["Meier", "Hansi", "Fuxx"]);
+      document.getElementById("myTest").appendChild(tbl.getTableHTML());
+    </script>
+  </body>
+
+</html>
