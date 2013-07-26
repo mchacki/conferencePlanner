@@ -1,0 +1,41 @@
+#leftOverview, #midOverview, #rightOverview {
+  float:left;
+  height: 100%;
+}
+
+#leftOverview {
+  width: 10%;
+}
+
+#midOverview {
+  width: 70%;
+}
+
+#rightOverview {
+  width: 20%;
+}
+
+#midOverview ul, #rightOverview ul {
+  margin:0 !important;
+  padding: 0 !important;
+  width: 100%;
+}
+
+.sortable {
+  list-style-type: none;
+  float: left;
+  background: #eee;
+  padding: 5px;
+}
+
+.sortable li {
+  margin: 5px;
+  padding: 5px;
+  font-size: 1.2em;
+  margin-right: 5px;
+  width: auto;
+}
+
+.talksClass {
+  height: 100px;
+}
