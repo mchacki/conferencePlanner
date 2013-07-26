@@ -21,6 +21,7 @@
     
     "apps.js": {
       "files": [
+	      "assets/js/libs/**",
 	      "assets/js/models/**",
 	      "assets/js/collections/**",
 	      "assets/js/views/**",
