@@ -81,8 +81,7 @@ app.overView = Backbone.View.extend({
     console.log("before remo : " + this.count);
     this.removedTrackToTalks()
     var id = e.currentTarget.id;
-    var count = id.replace( /^\D+/g, '');
-    $('#sortable'+count).remove();
+    $('#sortable' + (this.count - 1)).remove();
 
     if (this.count - 1 === 1) {
       this.setTrackSize();
