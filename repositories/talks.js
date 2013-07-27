@@ -54,7 +54,7 @@
       },
       
       del: function(id) {
-        return this.collection.delete(id);
+        return this.collection.remove(id);
       }
     });
   exports.Repository = Talks_Repository;
