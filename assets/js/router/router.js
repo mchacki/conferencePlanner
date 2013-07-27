@@ -5,7 +5,8 @@ var app = app || {};
 app.Router = Backbone.Router.extend({
 
   routes: {
-    ""       : "main",
+    ""        : "main",
+    "home"    : "main",
     "talks"   : "talks",
     "speaker" : "speaker"
   },
@@ -20,14 +21,17 @@ app.Router = Backbone.Router.extend({
 
   main: function () {
     this.overView.render();
+    this.naviView.setActive("home");
   },
 
   talks: function () {
     this.talkView.render();
+    this.naviView.setActive("talks");
   },
 
   speaker: function () {
     this.speakerView.render();
+    this.naviView.setActive("speaker");
   }
 
 });

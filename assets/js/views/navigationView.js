@@ -7,7 +7,7 @@ app.navigationView = Backbone.View.extend({
   el: '#header',
 
   events: {
-    "click li": "navTo"
+    "click li": "switchToTab"
   },
 
   init: function () {
@@ -16,11 +16,15 @@ app.navigationView = Backbone.View.extend({
   template: new EJS({url: 'templates/navigationView.ejs'}),
 
   switchToTab: function(e) {
-    console.log(e.currentTarget);
+    app.router.navigate(
+      e.currentTarget.id,
+      {trigger: true}
+    );
   },
 
-  navTo: function(e) {
-  
+  setActive: function(id) {
+    $("li", $(this.el)).toggleClass("active", false);
+    $("#" + id).toggleClass("active", true);
   },
 
   render: function() {
