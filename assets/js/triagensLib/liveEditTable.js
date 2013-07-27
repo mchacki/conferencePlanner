@@ -53,6 +53,9 @@ app.LiveEditTable = function (titles, options) {
       if (isBoolean[index]) {
         return !cell.firstChild.checked;
       }
+      if (selection[index]) {
+        return cell.firstChild.selectedIndex === 0;
+      }
       return cell.firstChild.value === "";
     },
   
@@ -216,6 +219,27 @@ app.LiveEditTable = function (titles, options) {
       insertEmptyRow();
     },
   
+  
+    updateSelectionList = function(key, newList) {
+      var index = titleMap[key];
+      selection[index] = newList;
+      _.each(rows, function(r) {
+        var cell = r.childNodes[index],
+          list = cell.firstChild,
+          sVal = cell.childNodes[list.selectedIndex].value;
+        list.childNodes.length = 0;
+        _.each(newList, function(l, index) {
+          var op = document.createElement("option");
+          op.value = l.id;
+          op.appendChild(document.createTextNode(l.text));
+          list.appendChild(op);
+          if (l.id === sVal) {
+            list.selectedIndex = index;
+          }
+        });
+      });
+    },
+  
     insertEntry = function(o) {
       var tr = rows[rows.length - 1],
         i = 0;
@@ -252,4 +276,5 @@ app.LiveEditTable = function (titles, options) {
   this.insertBulk = insertBulk;
   this.clean = clean;
   this.getTableHTML = getTableHTML;
+  this.updateSelectionList = updateSelectionList;
 }

@@ -48,7 +48,18 @@ app.TalkView = Backbone.View.extend({
         self.tbl.clean();
         self.tbl.insertBulk(self.collection.toArray());
       }
-    })
+    });
+    $.ajax({
+      url: "list/speakers",
+      success: function(list) {
+        self.tbl.updateSelectionList("Speaker", list);
+      },
+      async: true
+    });
+    
+    
+    
+    
     return this;
   }
 
