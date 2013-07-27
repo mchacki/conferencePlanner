@@ -3,7 +3,7 @@
 
 var app = app || {};
 
-app.overView = Backbone.View.extend({
+app.overViewOld = Backbone.View.extend({
   el: '#content',
 
   initialize: function () {
@@ -74,10 +74,13 @@ app.overView = Backbone.View.extend({
     $('#planTable thead tr').append(th);
     $.each(children, function(k,v) {
       var emptyTd = document.createElement('td');
-      var emptyUl = document.createElement('ul');
-      $(emptyUl).addClass('droptrue sortable ui-sortable');
+      //var emptyUl = document.createElement('ul');
+      $(emptyTd).addClass('droptrue sortable ui-sortable')
+      .css("background", "cyan")
+      .css("min-height", "40px")
+      .css("width", "100%");
       $(this).append(emptyTd);
-      $(emptyTd).append(emptyUl);
+     // $(emptyTd).append(emptyUl);
     });
     this.count++;
 
@@ -93,6 +96,7 @@ app.overView = Backbone.View.extend({
 
   applyEvents: function () {
     var self = this;
+    /*
     $( "ul.droptrue" ).sortable({
       cursor: 'move',
       cursorAt: {top: 17, left: 50},
@@ -103,7 +107,16 @@ app.overView = Backbone.View.extend({
       stop: function (e, ui) {
         $(ui.item).css('width', 'auto');
       }
+    }); 
+    */
+    
+    
+    $( "td.droptrue" ).droppable({
+      drop: function( event, ui ) {
+        alert("!");
+      }
     });
+    
   },
 
   addTrack: function (track) {
@@ -172,9 +185,10 @@ app.overView = Backbone.View.extend({
       content = "TEXT";
     }
     var li = document.createElement('li');
-    $(li).addClass('ui-state-default');
-    $(li).text(content);
-
+    $(li).addClass('ui-state-default')
+     .text(content)
+     .draggable();
+     
     $('#availableTalks').append(li);
   },
 

@@ -17,6 +17,7 @@
 
 #rightOverview {
   width: 20%;
+  overflow: auto;
 }
 
 #midOverview ul, #rightOverview ul {
@@ -44,4 +45,8 @@
 
 .talksClass {
   height: 100px;
+}
+
+div.talk {
+  background: red;
 }

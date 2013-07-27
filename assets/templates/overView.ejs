@@ -1,3 +1,18 @@
+<%
+var getFormatedTimeLabel = function(step) {
+  var mins = start + (unitSize * step);
+  var h = Math.floor(mins / 60);
+  mins %= 60;
+  if (mins < 10) {
+    mins = "0" + mins;
+  }
+  if (h < 10) {
+    h = "0" + h;
+  }
+  return h + ":" + mins;
+};
+
+%>
 <div id="leftOverview">
   Day 1<br>
   Day 2<br>
@@ -6,6 +21,27 @@
 
 <div id="midOverview">
 
+  <table id="planTable" class="table">
+    <thead>
+      <th>Time</th>
+      <%for(var i = 1; i <= tracks; i++) {%>
+        <th>Track <%=i%></th>
+      <%}%>
+    </thead>
+    <tbody>
+      <%for(var row = 0; row < units; row++) {%>
+        <tr id="<%=row %>">
+          <td><%=getFormatedTimeLabel(row)%></td>
+          <%for(var t = 0; t < tracks; t++) {%>
+            <td id="<%=row + "_" + t%>"></td>
+          <%}%>
+        </tr>
+      <%}%>
+    </tbody>
+  </table>
+  
+<!--
+  
   <table id="planTable">
     <thead>
       <th>Time</th>
@@ -14,7 +50,6 @@
     </tbody>
   </table>
   
-<!--
   <ul id="sortable1" class="droptrue sortable">
     Track 1
     <button id="newTrack" class="newTrack">Add track</button>
@@ -24,7 +59,7 @@
     <li class="ui-state-default">Item 4</li>
     <li class="ui-state-default">Item 5</li>
   </ul>
---!>
+-->
 </div>
 
 <div id="rightOverview">
