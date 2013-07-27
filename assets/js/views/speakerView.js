@@ -11,15 +11,17 @@ app.SpeakerView = Backbone.View.extend({
     this.collection = new app.Speakers();
     this.tbl = new app.LiveEditTable(
       ["Name", "Biography", "Company", "Image"],
-      function(o, row) {
-        self.collection.save(o,
-          function(obj) {
-            row.id = obj.get("_key");
-          }
-        );
-      },
-      function() {
-        self.tbl.insertEmptyRow();
+      {
+        onChange: function(o, row) {
+          self.collection.save(o,
+            function(obj) {
+              row.id = obj.get("_key");
+            }
+          );
+        },
+        onDelete: function(id) {
+          self.collection.destroy(id);
+        }
       }
     );
   },

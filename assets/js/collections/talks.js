@@ -17,6 +17,14 @@ app.Talks = Backbone.Collection.extend({
     }
   },
   
+  destroy: function(key) {
+    var mod = this.get(key);
+    if (mod) {
+      mod.destroy();
+      this.remove(mod);
+    }
+  },
+  
   toArray: function() {
     return this.models.map(function(m) {
       return m.attributes;
