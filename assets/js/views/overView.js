@@ -9,7 +9,12 @@ app.overView = Backbone.View.extend({
   initialize: function () {
   },
 
-  count: 0,
+  count: 1,
+
+  events: {
+    "click #newTrack"    : "addTrack",
+    "click .removeTrack" : "removeTrack"
+  },
 
   template: new EJS({url: 'templates/overView.ejs'}),
 
@@ -29,11 +34,13 @@ app.overView = Backbone.View.extend({
   },
 
   applyEvents: function () {
+    var self = this;
     $( "ul.droptrue" ).sortable({
+      cursor: 'move',
+      cursorAt: {top: 17, left: 50},
       connectWith: "ul",
-      //mouse position
       start: function (e, ui) {
-        $(ui.item).css('width', '100px');
+        $(ui.item).css('width', '200px');
       },
       stop: function (e, ui) {
         $(ui.item).css('width', '100%');
@@ -44,11 +51,50 @@ app.overView = Backbone.View.extend({
   addTrack: function (track) {
     var ul = document.createElement('ul');
     $(ul).addClass('droptrue sortable');
-    $(ul).css('id','sortable' + (this.count));
+    var id = 'sortable'+this.count;
+    $(ul).attr('id',id);
     $('#midOverview').append(ul);
+    $(ul).append("Track "+(this.count+1));
+    this.addRemoveButton(ul);
     //content missing
 
+    this.count = this.count+1;
+
     this.setTrackSize();
+    this.applyEvents();
+  },
+
+  addRemoveButton: function (item) {
+    $('.removeTrack').remove();
+    var button = document.createElement('button');
+    $(button).text("Remove");
+    $(button).addClass("removeTrack");
+    $(button).attr("id","deleteTrack"+this.count);
+    $(item).append(button);
+  },
+
+  removedTrackToTalks: function () {
+
+  },
+
+  removeTrack: function (e) {
+    console.log("before remo : " + this.count);
+    this.removedTrackToTalks()
+    var id = e.currentTarget.id;
+    var count = id.replace( /^\D+/g, '');
+    $('#sortable'+count).remove();
+
+    if (this.count - 1 === 1) {
+      this.setTrackSize();
+      return;
+    }
+
+    this.count = this.count - 1;
+    var ul = $('#sortable'+(this.count - 1));
+
+    this.addRemoveButton(ul);
+    this.setTrackSize();
+    console.log("after remo : " + this.count);
   },
 
   addLiElement: function (content) {
@@ -60,13 +106,8 @@ app.overView = Backbone.View.extend({
     $('#availableTalks').append(li);
   },
 
-  removeTrack: function () {
-
-  },
-
   setTrackSize: function () {
     var counter = $('#midOverview').children().length;
-    this.count = counter;
     var width = 100 / counter;
     $('#midOverview ul').css("width", width+"%");
   }
