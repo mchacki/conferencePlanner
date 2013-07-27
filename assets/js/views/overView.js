@@ -49,16 +49,15 @@ app.overView = Backbone.View.extend({
   },
 
   addTrack: function (track) {
+    this.count = this.count+1;
     var ul = document.createElement('ul');
     $(ul).addClass('droptrue sortable');
     var id = 'sortable'+this.count;
     $(ul).attr('id',id);
     $('#midOverview').append(ul);
-    $(ul).append("Track "+(this.count+1));
+    $(ul).append("Track "+(this.count));
     this.addRemoveButton(ul);
     //content missing
-
-    this.count = this.count+1;
 
     this.setTrackSize();
     this.applyEvents();
@@ -78,22 +77,24 @@ app.overView = Backbone.View.extend({
   },
 
   removeTrack: function (e) {
-    console.log("before remo : " + this.count);
+    var addButton = false;
     this.removedTrackToTalks()
-    var id = e.currentTarget.id;
-    $('#sortable' + (this.count - 1)).remove();
 
-    if (this.count - 1 === 1) {
-      this.setTrackSize();
-      return;
+    if (this.count === 2) {
+      addButton = false;
+    }
+    else {
+      addButton = true;
     }
 
+    $('#sortable'+this.count).remove();
     this.count = this.count - 1;
-    var ul = $('#sortable'+(this.count - 1));
 
-    this.addRemoveButton(ul);
+    if (addButton === true) {
+      this.addRemoveButton('#sortable'+this.count);
+    }
+
     this.setTrackSize();
-    console.log("after remo : " + this.count);
   },
 
   addLiElement: function (content) {
