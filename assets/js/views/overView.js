@@ -7,6 +7,13 @@ app.overView = Backbone.View.extend({
   el: '#content',
 
   initialize: function () {
+    var self = this;
+    this.talks = new app.Talks();
+    this.talks.fetch({
+      success: function() {
+        self.appendCollectionTracks();
+      }
+    });
   },
 
   count: 1,
@@ -19,11 +26,23 @@ app.overView = Backbone.View.extend({
   template: new EJS({url: 'templates/overView.ejs'}),
 
   render: function() {
+
     $(this.el).html(this.template.text);
     this.applyEvents();
     this.applyCSS();
-    this.setTrackSize();
+
+    if( $('#availableTalks').children().length <= 1) {
+      this.appendCollectionTracks();
+    }
+
     return this;
+  },
+
+  appendCollectionTracks: function () {
+    var self = this;
+    $.each(this.talks.models, function(k,v) {
+      self.addTalk(v.attributes.Topic);
+    });
   },
 
   applyCSS: function () {
@@ -43,7 +62,7 @@ app.overView = Backbone.View.extend({
         $(ui.item).css('width', '200px');
       },
       stop: function (e, ui) {
-        $(ui.item).css('width', '100%');
+        $(ui.item).css('width', 'auto');
       }
     });
   },
@@ -57,6 +76,7 @@ app.overView = Backbone.View.extend({
     $('#midOverview').append(ul);
     $(ul).append("Track "+(this.count));
     this.addRemoveButton(ul);
+    this.addNewButton();
     //content missing
 
     this.setTrackSize();
@@ -72,13 +92,23 @@ app.overView = Backbone.View.extend({
     $(item).append(button);
   },
 
-  removedTrackToTalks: function () {
+  addNewButton: function () {
+    $('.newTrack').remove();
+    var button = document.createElement('button');
+    $(button).text("Add track");
+    $(button).attr("id", "newTrack");
+    $(button).addClass("newTrack");
+    $("#sortable"+this.count).prepend(button);
+  },
 
+  pullTrackToTalks: function () {
+    var elements = $('#sortable'+this.count).children('li');
+    $('#availableTalks').append(elements);
   },
 
   removeTrack: function (e) {
     var addButton = false;
-    this.removedTrackToTalks()
+    this.pullTrackToTalks()
 
     if (this.count === 2) {
       addButton = false;
@@ -94,14 +124,17 @@ app.overView = Backbone.View.extend({
       this.addRemoveButton('#sortable'+this.count);
     }
 
+    this.addNewButton();
     this.setTrackSize();
   },
 
-  addLiElement: function (content) {
+  addTalk: function (content) {
+    if (content === undefined) {
+      content = "TEXT";
+    }
     var li = document.createElement('li');
     $(li).addClass('ui-state-default');
-    $(li).text("TEXT");
-    //content missing
+    $(li).text(content);
 
     $('#availableTalks').append(li);
   },
