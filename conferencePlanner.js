@@ -95,12 +95,20 @@
     });
   
     app.post("talk", function(req,res) {
-      res.json(talks.save(req.requestBody));
+      var content = JSON.parse(req.requestBody),
+        ret = talks.save(content);
+      if (content.Speaker) {
+        gives.save(content.Speaker, ret._key);
+      }
+      res.json(ret);
     });
 
     app.put("talk/:id", function(req, res) {
-      var id = req.params("id");
-      res.json(talks.update(id, req.requestBody));
+      var id = req.params("id"),
+        content = JSON.parse(req.requestBody),
+        ret = talks.update(id, content);
+      gives.update(content.Speaker, ret._key);
+      res.json(ret);
     });
 
 

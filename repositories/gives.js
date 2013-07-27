@@ -51,6 +51,27 @@
       
       del: function(id) {
         return this.collection.remove(id);
+      },
+      
+      update: function(sId, tId) {
+        var speakerId = this.prefix + "_speakers/" + sId;
+        var talkId = this.prefix + "_talks/" + tId;
+        var ins = this.collection.inEdges(talkId)[0];
+        if (sId === "null") {
+          if (ins) {
+            this.collection.remove(ins._id);
+          }
+          return;
+        }
+        if (!ins) {
+          this.collection.save(speakerId, talkId, {});
+          return;
+        }
+        if (ins._from !== speakerId) {
+          this.collection.remove(ins._id);
+          this.collection.save(speakerId, talkId, {});
+          return;
+        }
       }
     });
   exports.Repository = Gives_Repository;
