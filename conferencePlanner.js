@@ -37,6 +37,12 @@
   var FoxxApplication = require("org/arangodb/foxx").Application,
     app = new FoxxApplication(applicationContext);
     
+    var _ = require("underscore");
+    
+    var conferences = app.createRepository("conferences", {
+      repository: "repositories/conferences"
+    });
+    
     var speakers = app.createRepository("speakers", {
       repository: "repositories/speakers"
     });
@@ -57,6 +63,28 @@
       repository: "repositories/inTrack"
     });
     
+    app.get("conference", function(req, res) {
+      res.json(conferences.list());
+    });
+  
+    app.get("conference/:id", function(req, res) {
+      var id = req.params("id");
+      res.json(conferences.show(id));
+    });
+    
+    app.post("conference", function(req,res) {
+      res.json(conferences.save(JSON.parse(req.requestBody)));
+    });
+    
+    app.put("conference/:id", function(req, res) {
+      var id = req.params("id");
+      res.json(conferences.update(id, JSON.parse(req.requestBody)));
+    });
+
+    app.del("conference/:id", function(req, res) {
+      var id = req.params("id");
+      res.json(conferences.del(id));
+    });  
     
     app.get("speaker", function(req, res) {
       res.json(speakers.list());
@@ -95,12 +123,20 @@
     });
   
     app.post("talk", function(req,res) {
-      res.json(talks.save(req.requestBody));
+      var content = JSON.parse(req.requestBody),
+        ret = talks.save(content);
+      if (content.Speaker) {
+        gives.save(content.Speaker, ret._key);
+      }
+      res.json(ret);
     });
 
     app.put("talk/:id", function(req, res) {
-      var id = req.params("id");
-      res.json(talks.update(id, req.requestBody));
+      var id = req.params("id"),
+        content = JSON.parse(req.requestBody),
+        ret = talks.update(id, content);
+      gives.update(content.Speaker, ret._key);
+      res.json(ret);
     });
 
 
@@ -136,7 +172,10 @@
     
     app.get("gives/:speakerId", function(req, res) {
       var sId = req.params("speakerId");
-      res.json(gives.listTalksOf(sId));
+      var edges = gives.listTalksOf(sId);
+      res.json(_.map(edges, function(e) {
+        return talks.show(e._to);
+      }));
     });
   
     app.del("gives/:edgeId", function(req, res) {
@@ -159,5 +198,7 @@
       var id = req.params("edgeId");
       res.json(inTrack.del(id));
     });
+  
+    
   
 }());
