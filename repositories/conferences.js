@@ -50,7 +50,7 @@
       },
       
       update: function(id, content) {
-        return this.collection.replace(id, content));
+        return this.collection.replace(id, content);
       },
       
       del: function(id) {

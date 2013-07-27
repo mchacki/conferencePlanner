@@ -73,12 +73,12 @@
     });
     
     app.post("conference", function(req,res) {
-      res.json(conferences.save(JSON,parse(req.requestBody)));
+      res.json(conferences.save(JSON.parse(req.requestBody)));
     });
     
     app.put("conference/:id", function(req, res) {
       var id = req.params("id");
-      res.json(conferences.update(id, JSON,parse(req.requestBody)));
+      res.json(conferences.update(id, JSON.parse(req.requestBody)));
     });
 
     app.del("conference/:id", function(req, res) {
