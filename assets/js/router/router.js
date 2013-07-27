@@ -11,6 +11,7 @@ app.Router = Backbone.Router.extend({
   },
 
   initialize: function () {
+    this.overView = new app.overView();
     this.naviView = new app.navigationView();
     this.naviView.render();
     this.speakerView = new app.SpeakerView();
@@ -18,7 +19,6 @@ app.Router = Backbone.Router.extend({
   },
 
   main: function () {
-    this.overView = new app.overView();
     this.overView.render();
   },
 
