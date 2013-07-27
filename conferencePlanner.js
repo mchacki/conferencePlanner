@@ -73,7 +73,7 @@
     
     app.put("speaker/:id", function(req, res) {
       var id = req.params("id");
-      speakers.update(id, req.requestBody);
+      res.json(speakers.update(id, req.requestBody));
     });
 
     app.del("speaker/:id", function(req, res) {
@@ -91,9 +91,14 @@
     });
   
     app.post("talk", function(req,res) {
-      talks.save(req.requestBody);
-      res.json("OK");
+      res.json(talks.save(req.requestBody));
     });
+
+    app.put("talk/:id", function(req, res) {
+      var id = req.params("id");
+      res.json(talks.update(id, req.requestBody));
+    });
+
 
     app.del("talk/:id", function(req, res) {
       var id = req.params("id");

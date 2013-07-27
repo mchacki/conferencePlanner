@@ -46,7 +46,11 @@
       },
       
       save: function(content) {
-        return this.collection.save(content);
+        return this.collection.save(JSON.parse(content));
+      },
+      
+      update: function(id, content) {
+        return this.collection.replace(id, JSON.parse(content));
       },
       
       del: function(id) {

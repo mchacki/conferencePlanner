@@ -14,6 +14,7 @@ app.Router = Backbone.Router.extend({
     this.naviView = new app.navigationView();
     this.naviView.render();
     this.speakerView = new app.SpeakerView();
+    this.talkView = new app.TalkView();
   },
 
   main: function () {
@@ -22,7 +23,7 @@ app.Router = Backbone.Router.extend({
   },
 
   talks: function () {
-
+    this.talkView.render();
   },
 
   speaker: function () {

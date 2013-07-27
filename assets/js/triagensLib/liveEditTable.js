@@ -71,6 +71,14 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
       return tr;
     },
   
+    clean = function() {
+      _.each(rows, function(r) {
+        table.removeChild(r);
+      });
+      rows = [];
+      insertEmptyRow();
+    },
+  
     insertEntry = function(o) {
       var tr = rows[rows.length - 1],
         i = 0;
@@ -90,7 +98,7 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
         insertEntry(o);
       });
     };
-  
+  insertEmptyRow();
   
   _.each(titles, function(t) {
     var th = document.createElement("th");
@@ -98,11 +106,11 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
     titleRow.appendChild(th);
   });
   table.appendChild(titleRow);
-  insertEmptyRow();
+  
   
   this.insertEmptyRow = insertEmptyRow;
   this.insertEntry = insertEntry;
   this.insertBulk = insertBulk;
-  
+  this.clean = clean;
   this.getTableHTML = getTableHTML;
 }

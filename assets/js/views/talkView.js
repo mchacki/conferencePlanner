@@ -3,16 +3,14 @@
 
 var app = app || {};
 
-app.SpeakerView = Backbone.View.extend({
+app.TalkView = Backbone.View.extend({
   el: '#content',
-  
-  template: new EJS({url: 'templates/speakerView.ejs'}),
 
   initialize: function () {
     var self = this;
-    this.collection = new app.Speakers();
+    this.collection = new app.Talks();
     this.tbl = new app.LiveEditTable(
-      ["Name", "Biography", "Company", "Image"],
+      ["Speaker", "Topic", "Abstract", "Duration", "Track", "Confirmed"],
       function(o, row) {
         self.collection.save(o,
           function(obj) {

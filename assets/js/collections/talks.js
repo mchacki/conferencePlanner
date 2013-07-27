@@ -1,8 +1,8 @@
 var app = app || {};
 
-app.Speakers = Backbone.Collection.extend({
-  model: app.Speaker,
-  url: "speaker",
+app.Talks = Backbone.Collection.extend({
+  model: app.Talk,
+  url: "talk",
   
   save: function(o, cb) {
     var mod = this.get(o._key);
