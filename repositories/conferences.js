@@ -1,11 +1,10 @@
 /*jslint indent: 2, nomen: true, maxlen: 100, white: true, plusplus: true, unparam: true */
-/*global todos*/
-/*global require, applicationContext*/
+/*global require, exports*/
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @brief
+/// @brief 
 ///
-/// @file
+/// @file This Document represents the repository communicating with ArangoDB
 ///
 /// DISCLAIMER
 ///
@@ -31,37 +30,33 @@
 
 
 
-(function() {
+(function () {
   "use strict";
-
-  var console = require("console");
-  var arangodb = require("org/arangodb");
-  var db = arangodb.db;
-
-  var createCollection = function(name) {
-    var handle = applicationContext.collectionName(name);
-    if (db._collection(handle) === null) {
-      db._create(handle);
-    } else {
-      console.warn("collection '%s' already exists. Leaving it untouched.", handle);
-    }
-  };
-
-  var createEdgeCollection = function(name) {
-    var handle = applicationContext.collectionName(name);
-    if (db._collection(handle) === null) {
-      db._createEdgeCollection(handle);
-    } else {
-      console.warn("collection '%s' already exists. Leaving it untouched.", handle);
-    }
-  };
-
-  createCollection("speakers");
-  createCollection("talks");
-  createCollection("tracks");
-  createCollection("conferences");
-  createEdgeCollection("gives");
-  createEdgeCollection("inTrack");
   
+  var _ = require("underscore"),
+    Foxx = require("org/arangodb/foxx"),
+    Conferences_Repository = Foxx.Repository.extend({
+      // Define the functionality to display all elements in the collection
+      list: function () {
+        return this.collection.toArray();
+      },
+      
+      show: function(id) {
+        return this.collection.document(id);
+      },
+      
+      save: function(content) {
+        return this.collection.save(content);
+      },
+      
+      update: function(id, content) {
+        return this.collection.replace(id, content));
+      },
+      
+      del: function(id) {
+        return this.collection.remove(id);
+      }
+    });
+  exports.Repository = Conferences_Repository;
   
 }());
