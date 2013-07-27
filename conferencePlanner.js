@@ -64,7 +64,11 @@
   
     app.get("speaker/:id", function(req, res) {
       var id = req.params("id");
-      speakers.show(id);
+      res.json(speakers.show(id));
+    });
+  
+    app.get("list/speakers", function(req, res) {
+      res.json(speakers.head());
     });
   
     app.post("speaker", function(req,res) {

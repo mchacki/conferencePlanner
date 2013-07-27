@@ -9,6 +9,7 @@ app.LiveEditTable = function (titles, options) {
     titleMap = {},
     isReadOnly = {},
     isBoolean = {},
+    selection = {},
     changeCallback = function() {},
     deleteCallback = function() {},
     titleRow = document.createElement("tr"),
@@ -28,8 +29,8 @@ app.LiveEditTable = function (titles, options) {
           return;
         }
         if (o.type) {
-          if (o.type === "selectable") {
-            
+          if (o.type === "selection") {
+            selection[titleMap[key]] = o.list;
           }
           return;
         }
@@ -67,6 +68,9 @@ app.LiveEditTable = function (titles, options) {
       }
       if (isBoolean[index]) {
         return cell.firstChild.checked;
+      }
+      if (selection[index]) {
+        return cell.firstChild.options[cell.firstChild.selectedIndex].value;
       }
       return cell.firstChild.value;
     },
@@ -106,6 +110,27 @@ app.LiveEditTable = function (titles, options) {
       td.appendChild(span);
     },
   
+    insertSelectionCell = function(tr, list) {
+      var td, input, empty;
+      td = document.createElement("td");
+      input = document.createElement("select");
+      tr.appendChild(td);
+      td.appendChild(input);
+      empty = document.createElement("option");
+      empty.value = null;
+      input.appendChild(empty);
+      _.each(list, function(l) {
+        var op = document.createElement("option");
+        op.value = l.id;
+        op.appendChild(document.createTextNode(l.text));
+        input.appendChild(op);
+      });
+      input.onchange = function() {
+        changeCallback(rowToJSON(tr), tr);
+        checkEmptyRows();
+      }
+    },
+  
     insertCheckBoxCell = function(tr) {
       var td, input;
       td = document.createElement("td");
@@ -141,6 +166,10 @@ app.LiveEditTable = function (titles, options) {
         insertCheckBoxCell(tr);
         return;
       }
+      if (selection[index]) {
+        insertSelectionCell(tr, selection[index]);
+        return;
+      }
       insertTextCell(tr);
     },
     
@@ -151,6 +180,15 @@ app.LiveEditTable = function (titles, options) {
       }
       if (isBoolean[index]) {
         cell.firstChild.checked = val || false;
+        return;
+      }
+      if (selection[index]) {
+        cell.firstChild.selectedIndex = 0;
+        _.each(cell.firstChild.childNodes, function(opt, index) {
+          if (opt.value === val) {
+            cell.firstChild.selectedIndex = index;
+          }
+        });
         return;
       }
       cell.firstChild.value = val || "";
@@ -197,6 +235,7 @@ app.LiveEditTable = function (titles, options) {
         insertEntry(o);
       });
     };
+    
   insertEmptyRow();
   _.each(titles, function(t, i) {
     var th = document.createElement("th");

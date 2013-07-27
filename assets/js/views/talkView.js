@@ -9,27 +9,34 @@ app.TalkView = Backbone.View.extend({
   initialize: function () {
     var self = this;
     this.collection = new app.Talks();
-    this.tbl = new app.LiveEditTable(
-      ["Speaker", "Topic", "Abstract", "Duration", "Track", "Confirmed"],
-      {
-        Speaker:  {
-          type: "selectable",
-          list: ["A", "B", "C"]
-        }
-        Track: "readonly",
-        Confirmed: "boolean",
-        onChange: function(o, row) {
-          self.collection.save(o,
-            function(obj) {
-              row.id = obj.get("_key");
+    $.ajax({
+      url: "list/speakers",
+      success: function(list) {
+        console.log("back");
+        self.tbl = new app.LiveEditTable(
+          ["Speaker", "Topic", "Abstract", "Duration", "Track", "Confirmed"],
+          {
+            Speaker:  {
+              type: "selection",
+              list: list
+            },
+            Track: "readonly",
+            Confirmed: "boolean",
+            onChange: function(o, row) {
+              self.collection.save(o,
+                function(obj) {
+                  row.id = obj.get("_key");
+                }
+              );
+            },
+            onDelete: function(id) {
+              self.collection.destroy(id);
             }
-          );
-        },
-        onDelete: function(id) {
-          self.collection.destroy(id);
-        }
-      }
-    );
+          }
+        );
+      },
+      async: false
+    });
   },
 
   render: function() {
