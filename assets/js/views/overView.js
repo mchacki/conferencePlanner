@@ -16,6 +16,12 @@ app.overView = Backbone.View.extend({
     });
   },
 
+  setup: {
+    start: 9,
+    stop: 18,
+    steps: 0.5
+  },
+
   count: 1,
 
   events: {
@@ -30,6 +36,8 @@ app.overView = Backbone.View.extend({
     $(this.el).html(this.template.text);
     this.applyEvents();
     this.applyCSS();
+    this.appendTime();
+    this.appendTrack();
 
     if( $('#availableTalks').children().length <= 1) {
       this.appendCollectionTracks();
@@ -43,6 +51,37 @@ app.overView = Backbone.View.extend({
     $.each(this.talks.models, function(k,v) {
       self.addTalk(v.attributes.Topic);
     });
+  },
+
+  appendTime: function() {
+    var count;
+
+    for (count=this.setup.start; count<=this.setup.stop; count = count+this.setup.steps) {
+    var tr = document.createElement('tr');
+    $('#planTable tbody').append(tr);
+      var td = document.createElement('td');
+      $(td).text(count);
+      $(tr).append(td);
+    }
+  },
+
+  appendTrack: function() {
+    var th = document.createElement('th');
+    $(th).text("Track: "+this.count);
+
+    var children = $('#planTable tbody').children();
+    $('#planTable thead tr').append(th);
+    $('#planTable thead tr').append(th);
+    $.each(children, function(k,v) {
+      var emptyTd = document.createElement('td');
+      var emptyUl = document.createElement('ul');
+      $(emptyUl).addClass('droptrue sortable ui-sortable');
+      $(this).append(emptyTd);
+      $(emptyTd).append(emptyUl);
+    });
+    this.count++;
+
+    this.applyEvents();
   },
 
   applyCSS: function () {
