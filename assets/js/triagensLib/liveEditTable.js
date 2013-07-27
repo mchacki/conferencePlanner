@@ -1,16 +1,21 @@
 var app = app || {};
 
-app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
+app.LiveEditTable = function (titles, changeCallback, addNewRowCallback, options) {
 
   var
     table = document.createElement("table"),
     count = titles.length,
     rows = [],
+    titleMap = {},
     titleRow = document.createElement("tr"),
-  
+    i = 0,
   /********************
   * Private Functions *
   ********************/
+  
+    parseOptions = function(o) {
+      console.log(o);
+    },
   
     isEmptyRow = function(r) {
       return !_.any(r.children, function(td) {
@@ -99,13 +104,17 @@ app.LiveEditTable = function (titles, changeCallback, addNewRowCallback) {
       });
     };
   insertEmptyRow();
-  
+  i = 0;
   _.each(titles, function(t) {
     var th = document.createElement("th");
     th.appendChild(document.createTextNode(t));
     titleRow.appendChild(th);
+    titleMap[t] = i;
+    i++;
   });
+  i = 0;
   table.appendChild(titleRow);
+  parseOptions(options);
   
   
   this.insertEmptyRow = insertEmptyRow;

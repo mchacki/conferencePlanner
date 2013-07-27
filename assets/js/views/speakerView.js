@@ -5,8 +5,6 @@ var app = app || {};
 
 app.SpeakerView = Backbone.View.extend({
   el: '#content',
-  
-  template: new EJS({url: 'templates/speakerView.ejs'}),
 
   initialize: function () {
     var self = this;
