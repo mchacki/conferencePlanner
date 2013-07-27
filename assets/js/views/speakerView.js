@@ -5,23 +5,23 @@ var app = app || {};
 
 app.SpeakerView = Backbone.View.extend({
   el: '#content',
-  
-  template: new EJS({url: 'templates/speakerView.ejs'}),
 
   initialize: function () {
     var self = this;
     this.collection = new app.Speakers();
     this.tbl = new app.LiveEditTable(
       ["Name", "Biography", "Company", "Image"],
-      function(o, row) {
-        self.collection.save(o,
-          function(obj) {
-            row.id = obj.get("_key");
-          }
-        );
-      },
-      function() {
-        self.tbl.insertEmptyRow();
+      {
+        onChange: function(o, row) {
+          self.collection.save(o,
+            function(obj) {
+              row.id = obj.get("_key");
+            }
+          );
+        },
+        onDelete: function(id) {
+          self.collection.destroy(id);
+        }
       }
     );
   },

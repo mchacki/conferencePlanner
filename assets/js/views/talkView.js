@@ -11,15 +11,23 @@ app.TalkView = Backbone.View.extend({
     this.collection = new app.Talks();
     this.tbl = new app.LiveEditTable(
       ["Speaker", "Topic", "Abstract", "Duration", "Track", "Confirmed"],
-      function(o, row) {
-        self.collection.save(o,
-          function(obj) {
-            row.id = obj.get("_key");
-          }
-        );
-      },
-      function() {
-        self.tbl.insertEmptyRow();
+      {
+        Speaker:  {
+          type: "selectable",
+          list: ["A", "B", "C"]
+        }
+        Track: "readonly",
+        Confirmed: "boolean",
+        onChange: function(o, row) {
+          self.collection.save(o,
+            function(obj) {
+              row.id = obj.get("_key");
+            }
+          );
+        },
+        onDelete: function(id) {
+          self.collection.destroy(id);
+        }
       }
     );
   },
