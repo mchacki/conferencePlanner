@@ -47,11 +47,12 @@ app.overView = Backbone.View.extend({
   template: new EJS({url: 'templates/overView.ejs'}),
 
   switchDay: function(e) {
-    var newDay = e.currentTarget.id;
+    var newDay = parseInt(e.currentTarget.id.substring(4));
     $("#day_" + this.day).parent().toggleClass("active", false);
-    $("#" + newDay).parent().toggleClass("active", true);
-    this.day = parseInt(newDay.substring(4));
-    // TODO switch Table
+    $("#day_" + newDay).parent().toggleClass("active", true);
+    $("#table_" + this.day).css("display", "none");
+    $("#table_" + newDay).css("display", "");
+    this.day = newDay;
   },
 
   updateMoveAblePosition: function(e) {
@@ -89,11 +90,12 @@ app.overView = Backbone.View.extend({
     }
     var t = this.talks.get(talk.id);
     var id = p.id.split("_"),
-      slotId = parseInt(id[0]),
-      trackId = parseInt(id[1]);
+      dayId = parseInt(id[0]),
+      slotId = parseInt(id[1]),
+      trackId = parseInt(id[2]);
     p.rowSpan = 1;
     for (i = this.getSizeOfTalk(t) - 1; i > 0; i--) {
-      next = document.getElementById((slotId + i) + "_" + trackId);
+      next = document.getElementById(dayId + "_" + (slotId + i) + "_" + trackId);
       next.style.display = "";
     }
     p.removeChild(talk);
@@ -106,13 +108,14 @@ app.overView = Backbone.View.extend({
     }
     var t = this.talks.get(talk.id);
     var id = p.id.split("_"),
-      slotId = parseInt(id[0]),
-      trackId = parseInt(id[1]);
+      dayId = parseInt(id[0])
+      slotId = parseInt(id[1]),
+      trackId = parseInt(id[2]);
       size = this.getSizeOfTalk(t);
     p.rowSpan = size;
     //t.size
     for (i = size - 1; i > 0; i--) {
-      next = document.getElementById((slotId + i) + "_" + trackId);
+      next = document.getElementById(dayId + "_" + (slotId + i) + "_" + trackId);
       next.style.display = "none";
     }
     p.insertBefore(talk, sib);
@@ -131,8 +134,9 @@ app.overView = Backbone.View.extend({
 
   checkAndReserveSpace: function (td, size) {
     var id = td.id.split("_"),
-      slotId = parseInt(id[0]),
-      trackId = parseInt(id[1]),
+      dayId = parseInt(id[0]),
+      slotId = parseInt(id[1]),
+      trackId = parseInt(id[2]),
       i,
       next,
       failed = false;
@@ -140,7 +144,7 @@ app.overView = Backbone.View.extend({
         return false;
       }
       for (i = 1; i < size; i++) {
-        next = document.getElementById((slotId + i) + "_" + trackId);
+        next = document.getElementById(dayId + "_" + (slotId + i) + "_" + trackId);
         if (next.style.display !== "none" && next.childNodes.length === 0) {
           next.style.display = "none";
         } else {
@@ -151,7 +155,7 @@ app.overView = Backbone.View.extend({
       }
       if (failed) {
         for (i; i > 0; i--) {
-          next = document.getElementById((slotId + i) + "_" + trackId);
+          next = document.getElementById(dayId + "_" + (slotId + i) + "_" + trackId);
           next.style.display = "";
         }
         return false;
@@ -162,7 +166,7 @@ app.overView = Backbone.View.extend({
 
 
   moveTalkToCalender: function(talkId, day, slot, track) {
-    var td = document.getElementById(slot + "_" + track),
+    var td = document.getElementById(day + "_" + slot + "_" + track),
       talkDiv = document.getElementById(talkId);
       
      
@@ -182,9 +186,10 @@ app.overView = Backbone.View.extend({
     var sel = e.currentTarget;
     var talk = this.talks.get(this.dragging.id);
     var tdId = sel.id.split("_");
-    var track = tdId[1];
-    var slot = tdId[0];
-    if (this.moveTalkToCalender(this.dragging.id, 1, slot, track)) {
+    var day = tdId[0];
+    var slot = tdId[1];
+    var track = tdId[2];
+    if (this.moveTalkToCalender(this.dragging.id, day, slot, track)) {
       $.ajax({
         url: "inConf/" + talk.get("_key") + "/" + this.conf._key,
         method: "POST",

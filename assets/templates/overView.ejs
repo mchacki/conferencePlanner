@@ -14,32 +14,43 @@ var getFormatedTimeLabel = function(step) {
 
 %>
 <div id="leftOverview">
-  Day 1<br>
-  Day 2<br>
-  Day 3<br>
+  <ul class="nav nav-pills nav-stacked">  
+  <% for (var i = 1; i <= days; i++) {
+    if(active_day === i) {%>
+    <li class="active">
+    <%} else {%>
+    <li>
+    <%}%>
+        <a id="day_<%=i%>" class="day">Day <%=i%></a>
+    </li>
+  <% } %>
 </div>
 
 <div id="midOverview">
-
-  <table id="planTable" class="table">
-    <thead>
-      <th>Time</th>
-      <%for(var i = 1; i <= tracks; i++) {%>
-        <th>Track <%=i%></th>
-      <%}%>
-    </thead>
-    <tbody>
-      <%for(var row = 0; row < slots; row++) {%>
-        <tr id="<%=row %>">
-          <td><%=getFormatedTimeLabel(row)%></td>
-          <%for(var t = 0; t < tracks; t++) {%>
-            <td id="<%=row + "_" + t%>" class="slot"></td>
-          <%}%>
-        </tr>
-      <%}%>
-    </tbody>
-  </table>
-  
+  <% for (var d = 1; d <= days; d++) {
+    if (d === active_day) {%>
+    <table class="table" id="table_<%=d%>">
+    <%} else {%>
+    <table class="table" id="table_<%=d%>" style="display:none">
+    <%}%>
+      <thead>
+        <th>Time</th>
+        <%for(var i = 1; i <= tracks; i++) {%>
+          <th>Track <%=i%></th>
+        <%}%>
+      </thead>
+      <tbody>
+        <%for(var row = 0; row < slots; row++) {%>
+          <tr id="<%=row %>">
+            <td><%=getFormatedTimeLabel(row)%></td>
+            <%for(var t = 0; t < tracks; t++) {%>
+              <td id="<%=d + "_" + row + "_" + t%>" class="slot"></td>
+            <%}%>
+          </tr>
+        <%}%>
+      </tbody>
+    </table>
+  <% } %>
 <!--
   
   <table id="planTable">
