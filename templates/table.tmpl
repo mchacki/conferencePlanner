@@ -1,10 +1,19 @@
-<h1>
-  <%= name %>
-</h1>
+<h1><%= name %></h1>
+
 <table id="<%= name %>">
+
   <thead>
-    <th>test</th>
+    <tr><% for(var i = 1; i <= tracks; i++){ %>
+      <th><%= "Track " + i %></th><% } %>
+    </tr>
   </thead>
+
   <tbody>
+    <% _.each(talks, function(k,v) { %>
+    <tr>
+      <td><%= k.name %>\n<%= k.content %></td>
+    </tr>
+    <%});%>
   </tbody>
+
 </table>
