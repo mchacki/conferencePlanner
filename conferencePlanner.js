@@ -139,37 +139,36 @@
       res.json(ret);
     });
 
-
     app.del("talk/:id", function(req, res) {
       var id = req.params("id");
       res.json(talks.del(id));
     });
-  
+
     app.get("track", function(req, res) {
       res.json(tracks.list());
     });
-  
+
     app.get("track/:id", function(req, res) {
       var id = req.params("id");
       tracks.show(id);
     });
-  
+
     app.post("track", function(req,res) {
       tracks.save(req.requestBody);
       res.json("OK");
     });
-  
+
     app.del("track/:id", function(req, res) {
       var id = req.params("id");
       res.json(tracks.del(id));
     });
-    
+
     app.post("gives/:speakerId/:talkId", function(req, res) {
       var sId = req.params("speakerId");
       var tId = req.params("talkId");
       res.json(gives.save(sId, tId));
     });
-    
+
     app.get("gives/:speakerId", function(req, res) {
       var sId = req.params("speakerId");
       var edges = gives.listTalksOf(sId);
@@ -177,23 +176,34 @@
         return talks.show(e._to);
       }));
     });
-  
+
     app.del("gives/:edgeId", function(req, res) {
       var id = req.params("edgeId");
       res.json(gives.del(id));
     });
-  
+
     app.get("inTrack/:trackId", function(req, res) {
       var tId = req.params("trackId");
       res.json(inTrack.listTalksIn(tId));
     });
-  
+
+    app.get("html/:confId/:day", function(req, res) {
+      var confId = req.params("confId");
+      var day = req.params("day");
+      var TG = require("lib/templateGenerator").TemplateGenerator;
+      var tg = new TG(applicationContext.basePath);
+
+      var test = tg.createTable("Home");
+
+      res.body = test;
+    });
+
     app.post("inTrack/:trackId/:talkId", function(req, res) {
       var talkId = req.params("talkId");
       var trackId = req.params("trackId");
       res.json(inTrack.save(talkId, trackId));
     });
-    
+
     app.del("inTrack/:edgeId", function(req, res) {
       var id = req.params("edgeId");
       res.json(inTrack.del(id));
@@ -210,5 +220,4 @@
         content = JSON.parse(req.requestBody);
         res.json(inConf.save(talkId, confId, content));
     });
-  
 }());
