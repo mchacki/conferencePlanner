@@ -118,6 +118,9 @@ app.overView = Backbone.View.extend({
 
   dropTalk: function(e) {
     e = e || window.event;
+    if (!this.dragging) {
+      return;
+    }
     e.cancelBubble = true;
     var sel = e.currentTarget;
     var talk = this.talks.get(this.dragging.id);
@@ -133,7 +136,13 @@ app.overView = Backbone.View.extend({
   },
 
   cancelDrag: function(e) {
+    if (!this.dragging) {
+      return;
+    }
     this.insertBackToParent(this.dragging, this.oldParent, this.oldSib);
+    this.dragging = null;
+    this.oldSib = null;
+    this.oldParent = null;
   },
 
   render: function() {
