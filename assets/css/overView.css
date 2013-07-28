@@ -49,8 +49,16 @@
 
 div.talk {
   background: red;
+  width: 100%;
 }
 
 td.slot {
   padding: 0px;
+}
+
+div.moveable {
+  position: absolute;
+  height: 20%;
+  width: 20%;
+  display: none;
 }

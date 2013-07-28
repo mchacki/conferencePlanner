@@ -1,11 +1,10 @@
 /*jslint indent: 2, nomen: true, maxlen: 100, white: true, plusplus: true, unparam: true */
-/*global todos*/
-/*global require, applicationContext*/
+/*global require, exports*/
 
 ////////////////////////////////////////////////////////////////////////////////
-/// @brief
+/// @brief 
 ///
-/// @file
+/// @file This Document represents the repository communicating with ArangoDB
 ///
 /// DISCLAIMER
 ///
@@ -31,37 +30,36 @@
 
 
 
-(function() {
+(function () {
   "use strict";
-
-  var console = require("console");
-  var arangodb = require("org/arangodb");
-  var db = arangodb.db;
-
-  var createCollection = function(name) {
-    var handle = applicationContext.collectionName(name);
-    if (db._collection(handle) === null) {
-      db._create(handle);
-    } else {
-      console.warn("collection '%s' already exists. Leaving it untouched.", handle);
-    }
-  };
-
-  var createEdgeCollection = function(name) {
-    var handle = applicationContext.collectionName(name);
-    if (db._collection(handle) === null) {
-      db._createEdgeCollection(handle);
-    } else {
-      console.warn("collection '%s' already exists. Leaving it untouched.", handle);
-    }
-  };
-
-  createCollection("speakers");
-  createCollection("talks");
-  createCollection("tracks");
-  createCollection("conferences");
-  createEdgeCollection("gives");
-  createEdgeCollection("inConf");
   
+  var _ = require("underscore"),
+    Foxx = require("org/arangodb/foxx"),
+    InConf_Repository = Foxx.Repository.extend({
+      
+      save: function(tKey, cKey, content) {
+        var confId = this.prefix + "_conferences/" + cKey;
+        var talkId = this.prefix + "_talks/" + tKey;
+        var old = _.findWhere(
+          this.collection.outEdges(talkId),
+          {_to: confId}
+        );
+        if (old) {
+          return this.collection.replace(old._key, content);
+        } else {
+          return this.collection.save(talkId, confId, content);
+        }        
+      },
+      
+      talksInConf: function(cKey) {
+        var confId = this.prefix + "_conferences/" + cKey;
+        return this.collection.inEdges(confId);
+      },
+      
+      del: function(id) {
+        return this.collection.remove(id);
+      }
+    });
+  exports.Repository = InConf_Repository;
   
 }());

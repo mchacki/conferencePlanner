@@ -11,8 +11,8 @@ app.TalkView = Backbone.View.extend({
     this.collection = new app.Talks();
     $.ajax({
       url: "list/speakers",
+      method: "GET",
       success: function(list) {
-        console.log("back");
         self.tbl = new app.LiveEditTable(
           ["Speaker", "Topic", "Abstract", "Duration", "Track", "Confirmed"],
           {
@@ -51,6 +51,7 @@ app.TalkView = Backbone.View.extend({
     });
     $.ajax({
       url: "list/speakers",
+      method: "GET",
       success: function(list) {
         self.tbl.updateSelectionList("Speaker", list);
       },

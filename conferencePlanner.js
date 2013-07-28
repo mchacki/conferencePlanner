@@ -59,8 +59,8 @@
       repository: "repositories/gives"
     });
     
-    var inTrack = app.createRepository("inTrack", {
-      repository: "repositories/inTrack"
+    var inConf = app.createRepository("inConf", {
+      repository: "repositories/inConf"
     });
     
     app.get("conference", function(req, res) {
@@ -199,6 +199,16 @@
       res.json(inTrack.del(id));
     });
   
-    
+    app.get("talksInConf/:confId", function(req, res) {
+      var id = req.params("confId");
+      res.json(inConf.talksInConf(id));
+    });
+  
+    app.post("inConf/:talkId/:confId", function(req, res) {
+      var talkId = req.params("talkId"),
+        confId = req.params("confId"),
+        content = JSON.parse(req.requestBody);
+        res.json(inConf.save(talkId, confId, content));
+    });
   
 }());
