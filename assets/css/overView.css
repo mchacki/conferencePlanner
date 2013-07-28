@@ -50,3 +50,7 @@
 div.talk {
   background: red;
 }
+
+td.slot {
+  padding: 0px;
+}

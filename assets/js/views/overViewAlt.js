@@ -11,8 +11,8 @@ app.overView = Backbone.View.extend({
     
     //TODO
     this.start = 540;
-    this.unitSize = 30;
-    this.units = 16;
+    this.slotSize = 30;
+    this.slots = 16;
     this.tracks = 4;
     this.rows = [];
     this.hr = {};
@@ -24,11 +24,53 @@ app.overView = Backbone.View.extend({
 
   events: {
     "mousedown .talk": "grabTalk",
-    "mouseup td": "dropTalk",
+    "mouseup td.slot": "dropTalk",
     "mouseup" : "cancelDrag"
   },
 
   template: new EJS({url: 'templates/overView.ejs'}),
+
+
+  getSizeOfTalk: function (t) {
+    return 4;
+  },
+
+  removeFromParent: function(talk) {
+    var p = talk.parentElement;
+    if (p.tagName.toLowerCase() === "ul") {
+      p.removeChild(talk);
+      return;
+    }
+    var t = this.talks.get(talk.id);
+    var id = p.id.split("_"),
+      slotId = parseInt(id[0]),
+      trackId = parseInt(id[1]);
+    p.rowSpan = 1;
+    for (i = this.getSizeOfTalk(t) - 1; i > 0; i--) {
+      next = document.getElementById((slotId + i) + "_" + trackId);
+      next.style.display = "";
+    }
+    p.removeChild(talk);
+  },
+
+  insertBackToParent: function(talk, p, sib) {
+    if (p.tagName.toLowerCase() === "ul") {
+      p.insertBefore(talk, sib);
+      return;
+    }
+    var t = this.talks.get(talk.id);
+    var id = p.id.split("_"),
+      slotId = parseInt(id[0]),
+      trackId = parseInt(id[1]);
+      size = this.getSizeOfTalk(t);
+    p.rowSpan = size;
+    //t.size
+    for (i = size - 1; i > 0; i--) {
+      next = document.getElementById((slotId + i) + "_" + trackId);
+      next.style.display = "none";
+    }
+    p.insertBefore(talk, sib);
+  },
 
   grabTalk: function(e) {
     e = e || window.event;
@@ -36,32 +78,62 @@ app.overView = Backbone.View.extend({
     this.dragging = sel;
     this.oldSib = sel.nextElementSibling;
     this.oldParent = sel.parentElement;
-    sel.parentElement.removeChild(sel);
+    this.removeFromParent(sel);
+    
     
     e.cancelBubble = true;
     e.stopPropagation();
+  },
+
+  checkAndReserveSpace: function (td, size) {
+    var id = td.id.split("_"),
+      slotId = parseInt(id[0]),
+      trackId = parseInt(id[1]),
+      i,
+      next,
+      failed = false;
+      if (slotId + size > this.slots) {
+        return false;
+      }
+      for (i = 1; i < size; i++) {
+        next = document.getElementById((slotId + i) + "_" + trackId);
+        if (next.style.display !== "none" && next.childNodes.length === 0) {
+          next.style.display = "none";
+        } else {
+          failed = true;
+          i--;
+          break;
+        }
+      }
+      if (failed) {
+        for (i; i > 0; i--) {
+          next = document.getElementById((slotId + i) + "_" + trackId);
+          next.style.display = "";
+        }
+        return false;
+      }
+      td.rowSpan = size;
+      return true;
   },
 
   dropTalk: function(e) {
     e = e || window.event;
+    e.cancelBubble = true;
     var sel = e.currentTarget;
     var talk = this.talks.get(this.dragging.id);
-    sel.rowSpan = 4; // TODO
-    
-    sel.appendChild(this.dragging);
-    this.dragging = null;
-    this.oldSib = null;
-    this.oldParent = null;
-    e.cancelBubble = true;
+    if (this.checkAndReserveSpace(sel, this.getSizeOfTalk(talk))) {
+      sel.appendChild(this.dragging);
+      this.dragging = null;
+      this.oldSib = null;
+      this.oldParent = null;
+    } else {
+      this.cancelDrag();
+    }
     e.stopPropagation();
   },
 
   cancelDrag: function(e) {
-    console.log("cancle");
-    this.oldParent.insertBefore(this.dragging, this.oldSib);
-    this.dragging = null;
-    this.oldSib = null;
-    this.oldParent = null;
+    this.insertBackToParent(this.dragging, this.oldParent, this.oldSib);
   },
 
   render: function() {
@@ -69,8 +141,8 @@ app.overView = Backbone.View.extend({
     $(this.el).html(this.template.render({
       tracks: this.tracks,
       start: this.start,
-      units: this.units,
-      unitSize: this.unitSize
+      slots: this.slots,
+      slotSize: this.slotSize
     }));
     this.talks.fetch({
       success: function() {
@@ -87,7 +159,7 @@ app.overView = Backbone.View.extend({
     div.appendChild(
       document.createTextNode(t.get("Topic"))
     );
-    div.style.height = (4 * 37) + "px"
+    div.style.height = (this.getSizeOfTalk(t) * 37) + "px"
     $('#availableTalks').append(div);
   },
 
@@ -96,12 +168,5 @@ app.overView = Backbone.View.extend({
     this.talks.each(function(k) {
       self.addTalk(k);
     });
-  },
-
-  setTrackSize: function () {
-    var counter = $('#midOverview').children().length;
-    var width = 100 / counter;
-    $('#midOverview ul').css("width", width+"%");
   }
-
 });

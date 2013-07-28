@@ -1,6 +1,6 @@
 <%
 var getFormatedTimeLabel = function(step) {
-  var mins = start + (unitSize * step);
+  var mins = start + (slotSize * step);
   var h = Math.floor(mins / 60);
   mins %= 60;
   if (mins < 10) {
@@ -29,11 +29,11 @@ var getFormatedTimeLabel = function(step) {
       <%}%>
     </thead>
     <tbody>
-      <%for(var row = 0; row < units; row++) {%>
+      <%for(var row = 0; row < slots; row++) {%>
         <tr id="<%=row %>">
           <td><%=getFormatedTimeLabel(row)%></td>
           <%for(var t = 0; t < tracks; t++) {%>
-            <td id="<%=row + "_" + t%>"></td>
+            <td id="<%=row + "_" + t%>" class="slot"></td>
           <%}%>
         </tr>
       <%}%>
