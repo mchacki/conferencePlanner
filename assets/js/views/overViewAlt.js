@@ -70,7 +70,8 @@ app.overView = Backbone.View.extend({
   },
   
   getSizeOfTalk: function (t) {
-    return 4;
+    var duration = t.get("Duration");
+    return Math.ceil(duration / this.slotSize);
   },
 
   removeFromParent: function(talk) {
@@ -158,12 +159,9 @@ app.overView = Backbone.View.extend({
 
   moveTalkToCalender: function(talkId, day, slot, track) {
     var td = document.getElementById(day + "_" + slot + "_" + track),
-      talkDiv = document.getElementById(talkId);
-      
-     
-    if (this.checkAndReserveSpace(td, this.getSizeOfTalk(talkId))) {
-      console.log(td);
-      console.log(talkDiv);
+      talkDiv = document.getElementById(talkId),
+      talk = this.talks.get(talkId);
+    if (this.checkAndReserveSpace(td, this.getSizeOfTalk(talk))) {
       td.appendChild(talkDiv);
       return true;
     }
