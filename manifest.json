@@ -33,10 +33,10 @@
         "assets/js/libs/backbone-min.js",
         "assets/js/libs/ejs_0.9_alpha_1_production.js",
         "assets/js/libs/bootstrap.js",
-	      "assets/js/models/**",
-	      "assets/js/collections/**",
-	      "assets/js/views/**",
-	      "assets/js/router/**"
+	"assets/js/models/**",
+	"assets/js/collections/**",
+	"assets/js/views/**",
+	"assets/js/router/**"
       ]
     },
     
