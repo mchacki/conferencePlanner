@@ -27,13 +27,6 @@ app.overView = Backbone.View.extend({
     this.oldParent = null; 
     this.moveAbleDiv = document.createElement("div");
     this.moveAbleDiv.className = "moveable";
-    $.ajax({
-      url: "talksInConf/" + this.conf._key,
-      method: "GET",
-      success: function(data) {
-        self.updateLinkedTalks(data);
-      }
-    });
   },
 
   events: {
@@ -57,7 +50,6 @@ app.overView = Backbone.View.extend({
 
   updateMoveAblePosition: function(e) {
     var x,y;
-    console.log("Gemeiert!");
     if (e) {
       x = e.pageX;
       y = e.pageY;
@@ -65,11 +57,10 @@ app.overView = Backbone.View.extend({
       x = event.clientX + document.body.scrollLeft;
       y = event.clientY + document.body.scrollTop;
     }
-    x += 10;
-    y += 10;
+    x += 1;
+    y += 1;
     this.moveAbleDiv.style.left = x + "px";
     this.moveAbleDiv.style.top = y + "px";
-    console.log("Gemeiert!");
   },
   
   cleanUpMovable: function() {
@@ -171,6 +162,8 @@ app.overView = Backbone.View.extend({
       
      
     if (this.checkAndReserveSpace(td, this.getSizeOfTalk(talkId))) {
+      console.log(td);
+      console.log(talkDiv);
       td.appendChild(talkDiv);
       return true;
     }
@@ -241,6 +234,13 @@ app.overView = Backbone.View.extend({
     this.talks.fetch({
       success: function() {
         self.appendCollectionTracks();
+        $.ajax({
+          url: "talksInConf/" + self.conf._key,
+          method: "GET",
+          success: function(data) {
+            self.updateLinkedTalks(data);
+          }
+        });
       }
     });
     $(this.el).append(this.moveAbleDiv);
@@ -254,7 +254,7 @@ app.overView = Backbone.View.extend({
     div.appendChild(
       document.createTextNode(t.get("Topic"))
     );
-    div.style.height = (this.getSizeOfTalk(t) * 37) + "px"
+    div.style.height = (this.getSizeOfTalk(t) * 37 - 20) + "px"
     $('#availableTalks').append(div);
   },
 

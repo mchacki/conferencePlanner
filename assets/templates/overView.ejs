@@ -29,9 +29,9 @@ var getFormatedTimeLabel = function(step) {
 <div id="midOverview">
   <% for (var d = 1; d <= days; d++) {
     if (d === active_day) {%>
-    <table class="table" id="table_<%=d%>">
+    <table class="table text-center" id="table_<%=d%>">
     <%} else {%>
-    <table class="table" id="table_<%=d%>" style="display:none">
+    <table class="table text-center" id="table_<%=d%>" style="display:none">
     <%}%>
       <thead>
         <th>Time</th>

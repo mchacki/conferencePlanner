@@ -49,16 +49,22 @@
 
 div.talk {
   background: red;
-  width: 100%;
+  margin: 4px;
+  border-radius: 16px;
+  border: 6px;
+  border-style: ridge;
+  border-color: darkred;
 }
 
 td.slot {
   padding: 0px;
 }
 
+table.text-center td, table.text-center th {
+  text-align: center;
+}
+
 div.moveable {
   position: absolute;
-  height: 20%;
-  width: 20%;
-  display: none;
+  width: 150px;
 }

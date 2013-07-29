@@ -259,7 +259,8 @@ app.LiveEditTable = function (titles, options) {
         insertEntry(o);
       });
     };
-    
+  
+  table.className = "table text-center";
   insertEmptyRow();
   _.each(titles, function(t, i) {
     var th = document.createElement("th");

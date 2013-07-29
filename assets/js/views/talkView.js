@@ -14,13 +14,12 @@ app.TalkView = Backbone.View.extend({
       method: "GET",
       success: function(list) {
         self.tbl = new app.LiveEditTable(
-          ["Speaker", "Topic", "Abstract", "Duration", "Track", "Confirmed"],
+          ["Speaker", "Topic", "Abstract", "Duration", "Confirmed"],
           {
             Speaker:  {
               type: "selection",
               list: list
             },
-            Track: "readonly",
             Confirmed: "boolean",
             onChange: function(o, row) {
               self.collection.save(o,
