@@ -88,3 +88,7 @@ div.moveable {
   position: absolute;
   width: 150px;
 }
+
+tr {
+height: 60px;
+}
