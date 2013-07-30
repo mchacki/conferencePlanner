@@ -78,6 +78,24 @@ app.LiveEditTable = function (titles, options) {
       return cell.firstChild.value;
     },
   
+    resultSetCellValue = function(res, cell, index) {
+      if (isReadOnly[index]) {
+        res[titles[index]] = cell.firstChild.innerHTML;
+        return;
+      }
+      if (isBoolean[index]) {
+        res[titles[index]] = cell.firstChild.checked;
+        return;
+      }
+      if (selection[index]) {
+        res[titles[index] + "_key"] = cell.firstChild.options[cell.firstChild.selectedIndex].value;
+        res[titles[index]] = cell.firstChild.options[cell.firstChild.selectedIndex].text;
+        return;
+      }
+      res[titles[index]] = cell.firstChild.value;
+      return;
+    },
+  
     checkEmptyRows = function() {
       var i = 0, r;
       for (i = 0; i < rows.length - 1; i++) {
@@ -100,7 +118,7 @@ app.LiveEditTable = function (titles, options) {
         res._key = tr.id;
       }
       for (i = 0; i < count; i++) {
-        res[titles[i]] = getCellValue(tr.children[i], i);
+        resultSetCellValue(res, tr.children[i], i);
       }
       return res;
     },
@@ -188,7 +206,7 @@ app.LiveEditTable = function (titles, options) {
       if (selection[index]) {
         cell.firstChild.selectedIndex = 0;
         _.each(cell.firstChild.childNodes, function(opt, index) {
-          if (opt.value === val) {
+          if (opt.text === val) {
             cell.firstChild.selectedIndex = index;
           }
         });

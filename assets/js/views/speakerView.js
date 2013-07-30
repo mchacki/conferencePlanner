@@ -10,7 +10,7 @@ app.SpeakerView = Backbone.View.extend({
     var self = this;
     this.collection = new app.Speakers();
     this.tbl = new app.LiveEditTable(
-      ["Name", "Biography", "Company", "Image"],
+      ["Name", "TwitterTag", "Company", "Biography", "Image"],
       {
         onChange: function(o, row) {
           self.collection.save(o,

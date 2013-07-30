@@ -57,6 +57,7 @@
         var speakerId = this.prefix + "_speakers/" + sId;
         var talkId = this.prefix + "_talks/" + tId;
         var ins = this.collection.inEdges(talkId)[0];
+        require("console").log(speakerId);
         if (sId === "null") {
           if (ins) {
             this.collection.remove(ins._id);

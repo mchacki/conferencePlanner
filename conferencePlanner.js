@@ -125,8 +125,8 @@
     app.post("talk", function(req,res) {
       var content = JSON.parse(req.requestBody),
         ret = talks.save(content);
-      if (content.Speaker) {
-        gives.save(content.Speaker, ret._key);
+      if (content.Speaker_key) {
+        gives.save(content.Speaker_key, ret._key);
       }
       res.json(ret);
     });
@@ -135,7 +135,7 @@
       var id = req.params("id"),
         content = JSON.parse(req.requestBody),
         ret = talks.update(id, content);
-      gives.update(content.Speaker, ret._key);
+      gives.update(content.Speaker_key, ret._key);
       res.json(ret);
     });
 

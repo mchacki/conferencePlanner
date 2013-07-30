@@ -14,13 +14,54 @@ app.TalkView = Backbone.View.extend({
       method: "GET",
       success: function(list) {
         self.tbl = new app.LiveEditTable(
-          ["Speaker", "Topic", "Abstract", "Duration", "Confirmed"],
+          ["Speaker", "Title", "Abstract", "Duration", "Category", "Level"],
           {
             Speaker:  {
               type: "selection",
               list: list
             },
-            Confirmed: "boolean",
+            Category: {
+              type: "selection",
+              list: [
+                {
+                  id: "use_case",
+                  text: "Use Case"
+                },
+                {
+                  id: "detail",
+                  text: "Technical / Algorithmic Detail"
+                },
+                {
+                  id: "product",
+                  text: "Product Demonstration"
+                },
+                {
+                  id: "training",
+                  text: "Training"
+                }
+              ]
+            },
+            Level: {
+              type: "selection",
+              list: [
+                {
+                  id: "beginner",
+                  text: "Beginner"
+                },
+                {
+                  id: "intermediate",
+                  text: "Intermediate"
+                },
+                {
+                  id: "advanced",
+                  text: "Advanced"
+                },
+                {
+                  id: "expert",
+                  text: "Expert"
+                }
+              ]
+            },
             onChange: function(o, row) {
               self.collection.save(o,
                 function(obj) {

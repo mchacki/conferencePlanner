@@ -19,6 +19,9 @@ app.overView = Backbone.View.extend({
     this.slotSize = 30;
     this.slots = 16;
     this.tracks = 4;
+    
+    
+    this.talkTmpl = new EJS({url: 'templates/singleTalkView.ejs'}),
     this.rows = [];
     this.hr = {};
     this.talks = new app.Talks();
@@ -246,14 +249,30 @@ app.overView = Backbone.View.extend({
   },
 
   addTalk: function (t) {
-    var div = document.createElement("div");
+    var height = this.getSizeOfTalk(t)
+    $('#availableTalks').append(
+      this.talkTmpl.render(
+        {
+          talk: t,
+          height: height
+        }
+      )
+    );
+    /*
+    
+    var div = document.createElement("div"),
+      title = document.createElement("h6"),
+      speaker = document.createElement("span"),
+      category = document.createElement("span"),
+      level = document.createElement("span");
     div.className = "talk";
     div.id = t.get("_key");
-    div.appendChild(
-      document.createTextNode(t.get("Topic"))
+    
+    title.appendChild(
+      document.createTextNode(t.get("Title"))
     );
-    div.style.height = (this.getSizeOfTalk(t) * 37 - 20) + "px"
-    $('#availableTalks').append(div);
+    div.style.height = (this.getSizeOfTalk(t) * 37 - 20) + "px";
+    */
   },
 
   appendCollectionTracks: function () {

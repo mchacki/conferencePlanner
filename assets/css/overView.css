@@ -48,11 +48,31 @@
 }
 
 div.talk {
-  background: red;
+  color: white;
   margin: 4px;
   border-radius: 16px;
   border: 6px;
   border-style: ridge;
+
+}
+
+div.talk-use_case {
+  background: orange;
+  border-color: darkorange;
+}
+
+div.talk-detail {
+  background: green;
+  border-color: darkgreen;
+}
+
+div.talk-product {
+background: blue;
+border-color: darkblue;
+}
+
+div.talk-training {
+  background: red;
   border-color: darkred;
 }
 
