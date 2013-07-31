@@ -244,7 +244,7 @@ app.LiveEditTable = function (titles, options) {
       _.each(rows, function(r) {
         var cell = r.childNodes[index],
           list = cell.firstChild,
-          sVal = cell.childNodes[list.selectedIndex].value;
+          sVal = cell.childNodes[list.selectedIndex || 0].value;
         list.childNodes.length = 0;
         _.each(newList, function(l, index) {
           var op = document.createElement("option");
