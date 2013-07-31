@@ -51,6 +51,15 @@
         }        
       },
       
+      removeTalk: function(tKey) {
+        var talkId = this.prefix + "_talks/" + tKey;
+        var toRm = this.collection.outEdges(talkId);
+        var self = this;
+        _.each(toRm, function(e) {
+          self.collection.remove(e._id);
+        });
+      },
+      
       talksInConf: function(cKey) {
         var confId = this.prefix + "_conferences/" + cKey;
         return this.collection.inEdges(confId);

@@ -35,6 +35,7 @@
   
   var _ = require("underscore"),
     Foxx = require("org/arangodb/foxx"),
+    db = require("internal").db,
     Talks_Repository = Foxx.Repository.extend({
       // Define the functionality to display all elements in the collection
       list: function () {
@@ -50,7 +51,19 @@
       },
       
       update: function(id, content) {
-        return this.collection.replace(id, content);
+        var col = this.collection;
+        var res = {};
+        db._executeTransaction({
+          collections: {
+            write: col.name()
+          },
+          action: function() {
+            if (col.exists(id)) {
+              res = col.replace(id, JSON.parse(content));
+            }
+          }
+        });
+        return res;
       },
       
       del: function(id) {

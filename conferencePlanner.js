@@ -141,6 +141,7 @@
 
     app.del("talk/:id", function(req, res) {
       var id = req.params("id");
+      inConf.removeTalk(id)
       res.json(talks.del(id));
     });
 
