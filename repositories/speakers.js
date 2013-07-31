@@ -60,7 +60,7 @@
       },
       
       save: function(content) {
-        return this.collection.save(JSON.parse(content));
+        return this.collection.save(content);
       },
       
       update: function(id, content) {

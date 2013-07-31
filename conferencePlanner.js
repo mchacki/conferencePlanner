@@ -100,7 +100,7 @@
     });
   
     app.post("speaker", function(req,res) {
-      res.json(speakers.save(req.requestBody));
+      res.json(speakers.save(JSON.parse(req.requestBody)));
     });
     
     app.put("speaker/:id", function(req, res) {
