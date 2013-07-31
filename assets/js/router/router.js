@@ -21,6 +21,7 @@ app.Router = Backbone.Router.extend({
       }
     });
 
+    this.loginView = new app.loginView();
     this.overView = new app.overView();
     this.naviView = new app.navigationView();
     this.speakerView = new app.SpeakerView();
@@ -43,7 +44,6 @@ app.Router = Backbone.Router.extend({
   },
 
   login: function () {
-    this.loginView = new app.loginView();
     this.loginView.render();
   }
 
