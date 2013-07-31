@@ -59,7 +59,7 @@
           },
           action: function() {
             if (col.exists(id)) {
-              res = col.replace(id, JSON.parse(content));
+              res = col.replace(id, content);
             }
           }
         });

@@ -105,7 +105,7 @@
     
     app.put("speaker/:id", function(req, res) {
       var id = req.params("id");
-      res.json(speakers.update(id, req.requestBody));
+      res.json(speakers.update(id, JSON.parse(req.requestBody)));
     });
 
     app.del("speaker/:id", function(req, res) {
