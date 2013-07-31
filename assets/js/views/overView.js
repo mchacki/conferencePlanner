@@ -32,7 +32,6 @@ app.overViewOld = Backbone.View.extend({
   template: new EJS({url: 'templates/overView.ejs'}),
 
   render: function() {
-
     $(this.el).html(this.template.text);
     this.applyEvents();
     this.applyCSS();

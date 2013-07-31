@@ -19,7 +19,6 @@ app.loginView = Backbone.View.extend({
   template: new EJS({url: 'templates/loginView.ejs'}),
 
   render: function() {
-    this.hideNav();
     $(this.el).html(this.template.text);
     return this;
   },
@@ -28,14 +27,6 @@ app.loginView = Backbone.View.extend({
     if(e.which == 13) {
       this.login();
     }
-  },
-
-  hideNav: function () {
-    $('#header').css('visibility','hidden');
-  },
-
-  showNav: function () {
-    $('#header').css('visibility','visible');
   },
 
   login: function() {
@@ -54,7 +45,6 @@ app.loginView = Backbone.View.extend({
     var response = this.collection.login(username, password);
     if (response === true) {
       app.router.navigate('home', true);
-      this.showNav();
     }
     else {
       alert("Login error");

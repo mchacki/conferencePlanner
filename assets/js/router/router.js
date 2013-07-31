@@ -31,16 +31,19 @@ app.Router = Backbone.Router.extend({
   main: function () {
     this.overView.render();
     this.naviView.setActive("home");
+    this.naviView.render();
   },
 
   talks: function () {
     this.talkView.render();
     this.naviView.setActive("talks");
+    this.naviView.render();
   },
 
   speaker: function () {
     this.speakerView.render();
     this.naviView.setActive("speaker");
+    this.naviView.render();
   },
 
   login: function () {
