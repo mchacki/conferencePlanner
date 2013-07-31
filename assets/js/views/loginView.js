@@ -53,8 +53,8 @@ app.loginView = Backbone.View.extend({
 
     var response = this.collection.login(username, password);
     if (response === true) {
-      this.showNav();
       app.router.navigate('home', true);
+      this.showNav();
     }
     else {
       alert("Login error");
