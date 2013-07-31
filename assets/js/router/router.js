@@ -2,19 +2,27 @@
 /*global window, $, Backbone */
 
 var app = app || {};
+var login = false;
+
 app.Router = Backbone.Router.extend({
 
   routes: {
     ""        : "main",
     "home"    : "main",
     "talks"   : "talks",
-    "speaker" : "speaker"
+    "speaker" : "speaker",
+    "login"   : "login"
   },
 
   initialize: function () {
+    $(document).ajaxError(function(err1, err2) {
+      if (err2.status === 401) {
+        login = true;
+      }
+    });
+
     this.overView = new app.overView();
     this.naviView = new app.navigationView();
-    this.naviView.render();
     this.speakerView = new app.SpeakerView();
     this.talkView = new app.TalkView();
   },
@@ -32,9 +40,21 @@ app.Router = Backbone.Router.extend({
   speaker: function () {
     this.speakerView.render();
     this.naviView.setActive("speaker");
+  },
+
+  login: function () {
+    this.loginView = new app.loginView();
+    this.loginView.render();
   }
 
 });
 
 app.router = new app.Router();
 Backbone.history.start();
+
+if (login === true) {
+  app.router.navigate('/login', true);
+}
+else {
+  app.router.naviView.render();
+}

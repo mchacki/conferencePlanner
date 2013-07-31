@@ -7,10 +7,12 @@ app.navigationView = Backbone.View.extend({
   el: '#header',
 
   events: {
-    "click li": "switchToTab"
+    "click li"            : "switchToTab",
+    "click #logoutButton" : "logout"
   },
 
-  init: function () {
+  initialize: function () {
+    this.collection = new app.Sessions();
   },
 
   template: new EJS({url: 'templates/navigationView.ejs'}),
@@ -30,6 +32,16 @@ app.navigationView = Backbone.View.extend({
   render: function() {
     $(this.el).html(this.template.text);
     return this;
+  },
+  
+  logout: function() {
+    var response = this.collection.logout();
+    if (response === true) {
+      app.router.navigate('/login', true);
+    }
+    else {
+      alert("Logout error");
+    }
   }
 
 });
