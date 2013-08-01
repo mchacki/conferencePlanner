@@ -15,13 +15,18 @@ app.Router = Backbone.Router.extend({
   },
 
   initialize: function () {
+    var self = this;
+    this.loginView = new app.loginView();
+
     $(document).ajaxError(function(err1, err2) {
       if (err2.status === 401) {
         login = true;
+        if (app.router) {
+          self.loginView.backToLogin();
+        }
       }
     });
 
-    this.loginView = new app.loginView();
     this.overView = new app.overView();
     this.naviView = new app.navigationView();
     this.speakerView = new app.SpeakerView();
