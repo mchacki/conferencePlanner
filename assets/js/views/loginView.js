@@ -53,9 +53,12 @@ app.loginView = Backbone.View.extend({
       app.router.navigate('home', true);
     }
     else {
-      alert("Login error");
+      this.loginError();
     }
+  },
 
+  loginError: function () {
+    $('#loginErrorMsg').show();
   }
 
 });
