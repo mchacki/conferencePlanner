@@ -46,7 +46,6 @@
         return _.map(
           this.collection.toArray(),
           function(s) {
-            require("console").log(JSON.stringify(s));
             return {
               id: s._key,
               text: s.Name
