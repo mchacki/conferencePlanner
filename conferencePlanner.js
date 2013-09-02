@@ -62,32 +62,50 @@
 
   var Conferences = require("./repositories/conferences").Repository;
   var conferences = new Conferences(
-    app.collection("conferences")
+    app.collection("conferences"),
+    {
+      prefix: app.collectionPrefix
+    }
   );
 
   var Speakers = require("./repositories/speakers").Repository;
   var speakers = new Speakers(
-    app.collection("speakers") 
+    app.collection("speakers"),
+    {
+      prefix: app.collectionPrefix
+    }
   );
 
   var Talks = require("./repositories/talks").Repository;
   var talks = new Talks(
-    app.collection("talks") 
+    app.collection("talks"),
+    {
+      prefix: app.collectionPrefix
+    }
   );
 
   var Tracks = require("./repositories/tracks").Repository;
   var tracks = new Tracks(
-    app.collection("tracks") 
+    app.collection("tracks"),
+    {
+      prefix: app.collectionPrefix
+    }
   );
 
   var Gives = require("./repositories/gives").Repository;
   var gives = new Gives(
-    app.collection("gives") 
+    app.collection("gives"), 
+    {
+      prefix: app.collectionPrefix
+    }
   );
 
   var InConf = require("./repositories/inConf").Repository;
   var inConf = new InConf(
-    app.collection("inConf") 
+    app.collection("inConf"),
+    {
+      prefix: app.collectionPrefix
+    }
   );
 
   app.before("/*", function (req, res) {
