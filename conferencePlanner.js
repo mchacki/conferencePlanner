@@ -37,21 +37,21 @@
   var FoxxApplication = require("org/arangodb/foxx").Application,
   app = new FoxxApplication(applicationContext);
   var internal = require("internal");
-  var foxxAuthentication = require("org/arangodb/foxx-authentication");
+  var foxxAuthentication = require("org/arangodb/foxx/authentication");
 
   function setupAuthentication () {
     var lifetime = 600;
 
-    var sessions = new foxxAuthentication.FoxxSessions(applicationContext, { 
+    var sessions = new foxxAuthentication.Sessions(applicationContext, { 
       lifetime: lifetime
     });
 
-    var cookieAuth = new foxxAuthentication.FoxxCookieAuthentication(applicationContext, {
+    var cookieAuth = new foxxAuthentication.CookieAuthentication(applicationContext, {
       lifetime: lifetime,
       name: "mycookie"
     }); 
 
-    var auth = new foxxAuthentication.FoxxAuthentication(applicationContext, sessions, cookieAuth);
+    var auth = new foxxAuthentication.Authentication(applicationContext, sessions, cookieAuth);
 
     return auth;
   }
@@ -60,29 +60,35 @@
 
   var _ = require("underscore");
 
-  var conferences = app.createRepository("conferences", {
-    repository: "repositories/conferences"
-  });
+  var Conferences = require("./repositories/conferences").Repository;
+  var conferences = new Conferences(
+    app.collection("conferences")
+  );
 
-  var speakers = app.createRepository("speakers", {
-    repository: "repositories/speakers"
-  });
+  var Speakers = require("./repositories/speakers").Repository;
+  var speakers = new Speakers(
+    app.collection("speakers") 
+  );
 
-  var talks = app.createRepository("talks", {
-    repository: "repositories/talks"
-  });
+  var Talks = require("./repositories/talks").Repository;
+  var talks = new Talks(
+    app.collection("talks") 
+  );
 
-  var tracks = app.createRepository("tracks", {
-    repository: "repositories/tracks"
-  });
+  var Tracks = require("./repositories/tracks").Repository;
+  var tracks = new Tracks(
+    app.collection("tracks") 
+  );
 
-  var gives = app.createRepository("gives", {
-    repository: "repositories/gives"
-  });
+  var Gives = require("./repositories/gives").Repository;
+  var gives = new Gives(
+    app.collection("gives") 
+  );
 
-  var inConf = app.createRepository("inConf", {
-    repository: "repositories/inConf"
-  });
+  var InConf = require("./repositories/inConf").Repository;
+  var inConf = new InConf(
+    app.collection("inConf") 
+  );
 
   app.before("/*", function (req, res) {
     app.currentSession = null;
@@ -144,65 +150,65 @@
     });
   });
 
-	app.post("/login", function (req, res) {
+  app.post("/login", function (req, res) {
 
     var parsedResponse = JSON.parse(req.requestBody);
-		var username = parsedResponse.username;
-		var password = parsedResponse.password;
+    var username = parsedResponse.username;
+    var password = parsedResponse.password;
 
-		try {
-			var users = new foxxAuthentication.FoxxUsers(applicationContext);
+    try {
+      var users = new foxxAuthentication.Users(applicationContext);
 
-			// only valid & active users can login
-			if (users.isValid(username, password)) {
-				app.currentSession = auth.beginSession(req, res, username, {
-					foo: "bar",
-					baz: "bam"
-				});
+      // only valid & active users can login
+      if (users.isValid(username, password)) {
+        app.currentSession = auth.beginSession(req, res, username, {
+          foo: "bar",
+          baz: "bam"
+        });
 
-				res.json({
-					"msg": "logged in",
-					"session": app.currentSession
-				});
-				return;
-			}
-		}
-		catch (err) {
-		}
+        res.json({
+          "msg": "logged in",
+          "session": app.currentSession
+        });
+        return;
+      }
+    }
+    catch (err) {
+    }
 
-		// user is invalid. show error
-		res.json({
-			"msg": "invalid user"
-		});
-		res.status(401);
-	});
+    // user is invalid. show error
+    res.json({
+      "msg": "invalid user"
+    });
+    res.status(401);
+  });
 
-	app.get("conference", function(req, res) {
-		res.json(conferences.list());
-	});
+  app.get("conference", function(req, res) {
+    res.json(conferences.list());
+  });
 
-	app.get("conference/:id", function(req, res) {
-		var id = req.params("id");
-		res.json(conferences.show(id));
-	});
+  app.get("conference/:id", function(req, res) {
+    var id = req.params("id");
+    res.json(conferences.show(id));
+  });
 
-	app.post("conference", function(req,res) {
-		res.json(conferences.save(JSON.parse(req.requestBody)));
-	});
+  app.post("conference", function(req,res) {
+    res.json(conferences.save(JSON.parse(req.requestBody)));
+  });
 
-	app.put("conference/:id", function(req, res) {
-		var id = req.params("id");
-		res.json(conferences.update(id, JSON.parse(req.requestBody)));
-	});
+  app.put("conference/:id", function(req, res) {
+    var id = req.params("id");
+    res.json(conferences.update(id, JSON.parse(req.requestBody)));
+  });
 
-	app.del("conference/:id", function(req, res) {
-		var id = req.params("id");
-		res.json(conferences.del(id));
-	});  
+  app.del("conference/:id", function(req, res) {
+    var id = req.params("id");
+    res.json(conferences.del(id));
+  });  
 
-	app.get("speaker", function(req, res) {
-		res.json(speakers.list());
-	});
+  app.get("speaker", function(req, res) {
+    res.json(speakers.list());
+  });
 
 	app.get("speaker/:id", function(req, res) {
 		var id = req.params("id");
@@ -310,29 +316,29 @@
 
 		var test = tg.createTable("Home");
 
-		res.body = test;
-	});
+    res.body = test;
+  });
 
-	app.post("inTrack/:trackId/:talkId", function(req, res) {
-		var talkId = req.params("talkId");
-		var trackId = req.params("trackId");
-		res.json(inTrack.save(talkId, trackId));
-	});
+  app.post("inTrack/:trackId/:talkId", function(req, res) {
+    var talkId = req.params("talkId");
+    var trackId = req.params("trackId");
+    res.json(inTrack.save(talkId, trackId));
+  });
 
-	app.del("inTrack/:edgeId", function(req, res) {
-		var id = req.params("edgeId");
-		res.json(inTrack.del(id));
-	});
+  app.del("inTrack/:edgeId", function(req, res) {
+    var id = req.params("edgeId");
+    res.json(inTrack.del(id));
+  });
 
-	app.get("talksInConf/:confId", function(req, res) {
-		var id = req.params("confId");
-		res.json(inConf.talksInConf(id));
-	});
+  app.get("talksInConf/:confId", function(req, res) {
+    var id = req.params("confId");
+    res.json(inConf.talksInConf(id));
+  });
 
-	app.post("inConf/:talkId/:confId", function(req, res) {
-		var talkId = req.params("talkId"),
-		confId = req.params("confId"),
-		content = JSON.parse(req.requestBody);
-		res.json(inConf.save(talkId, confId, content));
-	});
+  app.post("inConf/:talkId/:confId", function(req, res) {
+    var talkId = req.params("talkId"),
+    confId = req.params("confId"),
+    content = JSON.parse(req.requestBody);
+    res.json(inConf.save(talkId, confId, content));
+  });
 }());
